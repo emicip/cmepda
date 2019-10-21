@@ -17,9 +17,10 @@ class ProbabilityDensityFunction(InterpolatedUnivariateSpline):
     def ppf(self, x):
         ycdf = self.cdf(x) 
         k = InterpolatedUnivariateSpline(ycdf,x)
-        return np.array(k(ycdf))
+        return np.array(k(ycdf)) 
 
-
+    def rnd(self,size):
+        return self.ppf(np.random.uniform(size=size))
 
 
 if __name__ == "__main__":
@@ -27,9 +28,14 @@ if __name__ == "__main__":
     y = 2 * x
     p = ProbabilityDensityFunction(x, y)
     plt.plot(x, p(x))
-    plt.show()
+
+    plt.figure()
     plt.plot(x, p.cdf(x))
-    plt.show()
-    plt.plot(p.cdf(x), p.ppf(x))
+
+    plt.figure()
+    q = np.linspace(0., 1., 250)
+    plt.plot(q, p.ppf(q))
+
+   #plt.hist(p.rnd(1000),bins=100)
     #plt.plot(p.ppf(x))
     plt.show()
